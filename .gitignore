@@ -31,6 +31,10 @@
 *.out
 *.app
 
+# Working files
+*~
+
 # Working folders
-bin/*
-build/*
+bin
+build
+.vscode
