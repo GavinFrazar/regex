@@ -1,5 +1,9 @@
-set(LIB_HEADERS)
-set(LIB_SOURCES)
+set(LIB_HEADERS
+../include/regex/Regex.h
+)
+set(LIB_SOURCES
+Regex.cpp
+)
 # set(APP_HEADERS)
 # set(APP_SOURCES)
 
