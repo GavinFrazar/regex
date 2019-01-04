@@ -103,3 +103,34 @@ SCENARIO("Find the minimum char in a CharSet") {
     }
   }
 }
+
+SCENARIO("Print a CharSet") {
+  GIVEN("A CharSet with some chars") {
+    using Interval = CharSet::Interval;
+    CharSet cs({Interval('a', 'b'), Interval('e', 'e'), Interval('g', 'x')});
+    WHEN("The CharSet is converted to a string representation") {
+      std::string s = cs.toString();
+      THEN("The string will correctly describe the CharSet") {
+        REQUIRE(s == "(a,b), e, (g,x)");
+      }
+    }
+  }
+  GIVEN("A CharSet with a single char") {
+    CharSet cs{'c'};
+    WHEN("The single char CharSet is converted to string representation") {
+      std::string s = cs.toString();
+      THEN(
+          "The resulting string will have no unncessary delimters or "
+          "parentheses") {
+        REQUIRE(s == "c");
+      }
+    }
+  }
+  GIVEN("An empty CharSet") {
+    CharSet cs;
+    WHEN("The empty CharSet is converted to string representation") {
+      std::string s = cs.toString();
+      THEN("The string will be empty") { REQUIRE(s == ""); }
+    }
+  }
+}
