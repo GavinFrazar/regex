@@ -5,7 +5,7 @@ using Regex::CharSet;
 
 SCENARIO("CharSets can determine correctly whether they contain a char") {
   GIVEN("A CharSet with some chars") {
-    CharSet cs({'a', 'b', 'c'});
+    CharSet cs{'a', 'b', 'c'};
     WHEN("A char inside the CharSet is searched for") {
       bool containsChar = cs.contains('b');
       THEN("The char is found in the CharSet") { REQUIRE(containsChar); }
@@ -21,8 +21,8 @@ SCENARIO("CharSets can determine correctly whether they contain a char") {
 
 SCENARIO("Taking the union of two CharSets") {
   GIVEN("Two arbitrary CharSet with some overlapping intervals") {
-    CharSet A({'a', 'b', 'c'});
-    CharSet B({'b', 'd', 'f', 'a'});
+    CharSet A{'a', 'b', 'c'};
+    CharSet B{'b', 'd', 'f', 'a'};
     WHEN("CharSets A and B are unioned as CharSet C") {
       CharSet C = A | B;
       THEN("C contains all of A") {
@@ -40,8 +40,8 @@ SCENARIO("Taking the union of two CharSets") {
 
 SCENARIO("Taking the intersection of two CharSets") {
   GIVEN("Two arbitrary CharSet with some overlapping intervals") {
-    CharSet A({'a', 'b', 'c'});
-    CharSet B({'b', 'd', 'f', 'a'});
+    CharSet A{'a', 'b', 'c'};
+    CharSet B{'b', 'd', 'f', 'a'};
     WHEN("CharSets A and B are intersected as CharSet C") {
       CharSet C = A & B;
       THEN("C contains elements in A and B") {
@@ -62,7 +62,7 @@ SCENARIO("Taking the intersection of two CharSets") {
 
 SCENARIO("Taking the complement of a CharSet") {
   GIVEN("A CharSet with some chars") {
-    CharSet cs({'a', 'c', 'e'});
+    CharSet cs{'a', 'c', 'e'};
     WHEN("The complement of the CharSet is taken") {
       CharSet comp = !cs;
       THEN("The complement does not contain any char in the original CharSet") {
@@ -86,7 +86,7 @@ SCENARIO("Taking the complement of a CharSet") {
 
 SCENARIO("Find the minimum char in a CharSet") {
   GIVEN("A CharSet with some chars") {
-    CharSet cs({'x', 'z', 'c', 'd', 'b', 'f'});
+    CharSet cs{'x', 'z', 'c', 'd', 'b', 'f'};
     WHEN("The minimum element is asked for") {
       std::optional<char> min = cs.minElement();
       THEN("The minimum element in the set is returned") {

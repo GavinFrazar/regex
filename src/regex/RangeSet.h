@@ -22,12 +22,12 @@ class RangeSet {
   class Interval : public std::tuple<T, T> {
    public:
     using std::tuple<T, T>::tuple;
-    std::string toString() {
+    std::string toString() const {
       T a;
       T b;
-      std::tie(a, b) = this;
-      stringstream ss;
-      ss << '(' << a << ',' << b << ')';
+      std::tie(a, b) = *this;
+      std::stringstream ss;
+      ss << '(' << a << "," << b << ')';
       return ss.str();
     }
   };
@@ -39,13 +39,13 @@ class RangeSet {
   bool isEmpty();
   bool equals(const RangeSet<T, D> &other);
   friend bool operator==(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
+  std::string toString();
   const IndexedSeq<Interval> contents;
 
  protected:
   RangeSet() {}
   RangeSet(const IndexedSeq<Interval> &seq);
   RangeSet(const IndexedSeq<T> &list);
-  std::string toString();
   static IndexedSeq<Interval> construct(const IndexedSeq<T> &list);
   virtual D construct(const IndexedSeq<Interval> &v) = 0;
 
@@ -62,7 +62,7 @@ class RangeSet {
 class CharSet : public RangeSet<char, CharSet> {
  public:
   CharSet() = default;
-  CharSet(const IndexedSeq<char> &list);
+  CharSet(std::initializer_list<char> list);
   CharSet(const IndexedSeq<Interval> &intervals);
   CharSet(const CharSet &rhs) = default;
   CharSet(CharSet &&rhs) = delete;
@@ -152,7 +152,7 @@ inline bool RangeSet<T, D>::isEmpty() {
 
 template <class T, class D>
 inline bool RangeSet<T, D>::equals(const RangeSet<T, D> &other) {
-  return this == other;
+  return *this == other;
 }
 
 template <class T, class D>
@@ -169,7 +169,7 @@ inline std::string RangeSet<T, D>::toString() {
     return std::string();
   } else {
     using std::tie;
-    stringstream ss;
+    std::stringstream ss;
     std::for_each(elements.begin(), elements.end() - 1,
                   [&ss](const auto &interval) -> void {
                     T a;
@@ -179,6 +179,7 @@ inline std::string RangeSet<T, D>::toString() {
                       ss << a;
                     else
                       ss << interval.toString();
+                    ss << ", ";
                   });
     T a;
     T b;
