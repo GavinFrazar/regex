@@ -1,15 +1,18 @@
+set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/regex)
 set(LIB_HEADERS
-../include/regex/Regex.h
+${INCLUDE_PATH}/Regex.h
+RangeSet.h
 )
 set(LIB_SOURCES
 Regex.cpp
+RangeSet.cpp
 )
 # set(APP_HEADERS)
 # set(APP_SOURCES)
 
-set(LIBRARY_NAME regex)
+set(LIBRARY_NAME regex_lib)
 
-add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
+add_library(${LIBRARY_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
 
 set_target_properties(${LIBRARY_NAME} PROPERTIES
   VERSION ${VERSION}  # ${VERSION} was defined in the main CMakeLists.
