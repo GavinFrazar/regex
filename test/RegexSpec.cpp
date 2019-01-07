@@ -7,7 +7,7 @@ using Regex::EmptyString;
 using Regex::KleeneStar;
 using Regex::Union;
 
-SCENARIO("Representing Chars as a string") {
+SCENARIO("Representing Regex as a string") {
   GIVEN("A Chars regex with some chars") {
     Chars re{'a', 'b', 'c'};
     WHEN("The regex is coverted to a string") {
@@ -19,9 +19,21 @@ SCENARIO("Representing Chars as a string") {
   }
   GIVEN("An empty Chars") {
     Chars re;
-    WHEN("The regex is coverted to a string") {
+    WHEN("The regex is converted to a string") {
       auto s = re.toString();
       THEN("The string will be the symbol for nullset") { REQUIRE(s == "Ø"); }
+    }
+  }
+
+  GIVEN("A Concatenation regex") {
+    Chars a{'a'};
+    Chars b{'b'};
+    Concatenate re(a, b);
+    WHEN("The concat retgex is converted to a string") {
+      auto s = re.toString();
+      THEN("The string will be the concatenation of the a and b Chars") {
+        REQUIRE(s == "{a} ~ {b}");
+      }
     }
   }
 }
