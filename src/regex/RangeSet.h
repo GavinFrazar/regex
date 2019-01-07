@@ -71,7 +71,6 @@ class RangeSet {
   static IndexedSeq<Interval> collectInCommon(IndexedSeq<Interval> rangeA,
                                               IndexedSeq<Interval> rangeB);
   static IndexedSeq<Interval> order(IndexedSeq<Interval> seq);
-  static const char one = 1;
 };
 
 class CharSet : public RangeSet<char, CharSet> {
@@ -89,13 +88,11 @@ class CharSet : public RangeSet<char, CharSet> {
   static const char one = 1;         // STUB
 
  protected:
-  virtual CharSet construct(const IndexedSeq<CharSet::Interval> &v) override;
-
  private:
 };
 
 template <class T, class D>
-inline bool RangeSet<T, D>::contains(T elem) {
+inline bool RangeSet<T, D>::contains(const T &elem) const {
   for (const Interval &interval : elements) {
     if (elem >= std::get<0>(interval) && elem <= std::get<1>(interval))
       return true;
@@ -104,28 +101,28 @@ inline bool RangeSet<T, D>::contains(T elem) {
 }
 
 template <class T, class D>
-inline D RangeSet<T, D>::operator|(const D &other) {
+inline D RangeSet<T, D>::operator|(const D &other) const {
   IndexedSeq<Interval> temp(elements);
   temp.insert(temp.end(), other.elements.begin(), other.elements.end());
-  return construct(temp);
+  return D(temp);
 }
 
 template <class T, class D>
-inline D RangeSet<T, D>::operator&(const D &other) {
-  return construct(collectInCommon(elements, other.elements));
+inline D RangeSet<T, D>::operator&(const D &other) const {
+  return D(collectInCommon(elements, other.elements));
 }
 
 template <class T, class D>
-inline D RangeSet<T, D>::operator!() {
+inline D RangeSet<T, D>::operator!() const {
   using std::tie, std::ignore;
   if (elements.empty()) {
-    return construct({Interval(D::minValue, D::maxValue)});
+    return D({Interval(D::minValue, D::maxValue)});
   } else {
     IndexedSeq<Interval> newFirst;
     T min;
     tie(min, ignore) = elements.front();
     if (min != D::minValue) {
-      newFirst.push_back(Interval(min, min - D::one));
+      newFirst.push_back(Interval(D::minValue, min - D::one));
     }
 
     IndexedSeq<Interval> newLast;
@@ -211,10 +208,10 @@ inline std::string RangeSet<T, D>::toString() {
 }
 
 template <class T, class D>
-inline IndexedSeq<typename RangeSet<T, D>::Interval> RangeSet<T, D>::construct(
-    const IndexedSeq<T> &list) {
+inline IndexedSeq<typename RangeSet<T, D>::Interval>
+RangeSet<T, D>::constructIntervals(const std::initializer_list<T> Ts) {
   IndexedSeq<Interval> intervals;
-  for (const auto &elem : list) {
+  for (const auto &elem : Ts) {
     intervals.push_back(Interval(elem, elem));
   }
   return intervals;
@@ -232,7 +229,7 @@ inline T RangeSet<T, D>::saturatingIncrement(T elem) {
 
 template <class T, class D>
 inline T RangeSet<T, D>::saturatingDecrement(T elem) {
-  return elem == D::minValue ? elem : elem - one;
+  return elem == D::minValue ? elem : elem - D::one;
 }
 
 template <class T, class D>
