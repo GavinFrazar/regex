@@ -83,9 +83,9 @@ class CharSet : public RangeSet<char, CharSet> {
   CharSet &operator=(const CharSet &rhs) = default;
   CharSet &operator=(CharSet &&rhs) = delete;
   CharSet(CharSet &&rhs) = delete;
-  static const char minValue = 'A';  // STUB
-  static const char maxValue = 'z';  // STUB
-  static const char one = 1;         // STUB
+  static constexpr char minValue = 'A';  // STUB
+  static constexpr char maxValue = 'z';  // STUB
+  static constexpr char one = 1;         // STUB
 };
 
 template <class T, class D>
@@ -235,7 +235,7 @@ inline std::ostream &operator<<(std::ostream &os, const RangeSet<T, D> &m) {
 
 template <class T, class D>
 inline T RangeSet<T, D>::saturatingIncrement(T elem) {
-  return elem == D::maxValue ? elem : elem + one;
+  return elem == D::maxValue ? elem : elem + D::one;
 }
 
 template <class T, class D>

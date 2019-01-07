@@ -1,5 +1,4 @@
 set(UNIT_TEST_LIST
-  RegexSpec
   RangeSetSpec
   )
  
