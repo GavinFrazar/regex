@@ -62,15 +62,16 @@ class RangeSet {
 class CharSet : public RangeSet<char, CharSet> {
  public:
   CharSet() = default;
-  CharSet(std::initializer_list<char> list);
-  CharSet(const IndexedSeq<Interval> &intervals);
+  explicit CharSet(const IndexedSeq<Interval> &intervals);
+  explicit CharSet(const std::initializer_list<Interval> intervals);
+  explicit CharSet(const std::initializer_list<char> chars);
   CharSet(const CharSet &rhs) = default;
-  CharSet(CharSet &&rhs) = delete;
   CharSet &operator=(const CharSet &rhs) = default;
   CharSet &operator=(CharSet &&rhs) = delete;
-  static const char minValue = 'a';  // STUB
+  CharSet(CharSet &&rhs) = delete;
+  static const char minValue = 'A';  // STUB
   static const char maxValue = 'z';  // STUB
-  static const char one = 1;
+  static const char one = 1;         // STUB
 
  protected:
   virtual CharSet construct(const IndexedSeq<CharSet::Interval> &v) override;
