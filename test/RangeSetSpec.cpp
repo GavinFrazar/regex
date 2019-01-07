@@ -82,6 +82,18 @@ SCENARIO("Taking the complement of a CharSet") {
       }
     }
   }
+  GIVEN("An empty CharSet") {
+    CharSet cs;
+    WHEN("The complement of the empty CharSet is taken") {
+      CharSet comp = !cs;
+      THEN("The complement will be the entire alphabet") {
+        for (char c = CharSet::minValue; c <= CharSet::maxValue;
+             c += CharSet::one) {
+          REQUIRE(comp.contains(c));
+}
+      }
+    }
+  }
 }
 
 SCENARIO("Find the minimum char in a CharSet") {
