@@ -8,7 +8,7 @@
 namespace Regex {
 class Regex {
  public:
-  virtual std::string toString() = 0;
+  virtual std::string toString() const = 0;
 };
 
 class Chars : public Regex {
@@ -17,7 +17,7 @@ class Chars : public Regex {
   Chars(std::initializer_list<char> chars);
   explicit Chars(const CharSet &chars);
   const CharSet chars;
-  virtual std::string toString() override;
+  virtual std::string toString() const override;
 };
 
 class Concatenate : public Regex {
@@ -25,7 +25,7 @@ class Concatenate : public Regex {
   Concatenate(const Regex &a, const Regex &b);
   const Regex &a;
   const Regex &b;
-  virtual std::string toString() override;
+  virtual std::string toString() const override;
 };
 
 class Union : public Regex {
@@ -33,21 +33,21 @@ class Union : public Regex {
   Union(const Regex &a, const Regex &b);
   const Regex &a;
   const Regex &b;
-  virtual std::string toString() override;
+  virtual std::string toString() const override;
 };
 
 class KleeneStar : public Regex {
  public:
   KleeneStar(const Regex &a);
   const Regex &a;
-  virtual std::string toString() override;
+  virtual std::string toString() const override;
 };
 
 // TODO: Make this a singleton.
 class EmptyString : public Regex {
  public:
   EmptyString() = default;
-  virtual std::string toString() override;
+  virtual std::string toString() const override;
 };
 
 }  // namespace Regex
