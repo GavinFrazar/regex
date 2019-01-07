@@ -134,8 +134,7 @@ inline D RangeSet<T, D>::operator!() const {
 
     IndexedSeq<Interval> newMiddle;
     if (elements.size() > 1) {
-      for (IndexedSeq<Interval>::const_iterator it = elements.begin();
-           it + 1 != elements.end(); ++it) {
+      for (auto it = elements.begin(); it + 1 != elements.end(); ++it) {
         T leftMax;
         T rightMin;
         tie(ignore, leftMax) = *it;
@@ -220,6 +219,17 @@ RangeSet<T, D>::constructIntervals(const std::initializer_list<T> Ts) {
 template <class T, class D>
 inline bool operator==(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs) {
   return lhs.elements == rhs.elements;
+}
+
+template <class T, class D>
+inline bool operator!=(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs) {
+  return !(lhs == rhs);
+}
+
+template <class T, class D>
+inline std::ostream &operator<<(std::ostream &os, const RangeSet<T, D> &m) {
+  os << m.toString();
+  return os;
 }
 
 template <class T, class D>
