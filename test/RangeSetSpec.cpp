@@ -146,3 +146,20 @@ SCENARIO("Print a CharSet") {
     }
   }
 }
+
+SCENARIO("Comparing CharSets") {
+  GIVEN("Some CharSets with some chars") {
+    CharSet A{'a', 'b', 'z'};
+    CharSet B{'a', 'b', 'z', 'y'};
+    CharSet C{'b', 'z', 'a'};
+    WHEN("The CharSets are equivalent") {
+      THEN("They will be correctly evaluated as equal") { REQUIRE(A == C); }
+    }
+    WHEN("The CharSets are not equivalent") {
+      THEN("They will be correctly evaluated as not equal") {
+        REQUIRE(A != B);
+        REQUIRE(B != C);
+      }
+    }
+  }
+}
