@@ -1,10 +1,8 @@
 set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/regex)
 set(LIB_HEADERS
-${INCLUDE_PATH}/Regex.h
 RangeSet.h
 )
 set(LIB_SOURCES
-Regex.cpp
 RangeSet.cpp
 )
 # set(APP_HEADERS)
