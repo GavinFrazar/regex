@@ -14,7 +14,8 @@ class Regex {
 class Chars : public Regex {
  public:
   Chars();
-  Chars(const CharSet &chars);
+  Chars(std::initializer_list<char> chars);
+  explicit Chars(const CharSet &chars);
   const CharSet chars;
   virtual std::string toString() override;
 };
