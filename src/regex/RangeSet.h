@@ -43,10 +43,10 @@ class RangeSet {
     operator std::string() { return this->toString(); }
   };
   // TODO: put these declarations in a proper order.
-  bool contains(const T &elem) const;
   D operator|(const D &other) const;
   D operator&(const D &other) const;
   D operator!() const;
+  bool contains(const T &elem) const;
   std::optional<T> minElement() const;
   bool isEmpty() const;
   bool equals(const RangeSet<T, D> &other) const;
@@ -57,20 +57,20 @@ class RangeSet {
   std::string toString() const;
 
  protected:
+  static IndexedSeq<Interval> constructIntervals(
+      const std::initializer_list<T> Ts);
   RangeSet() = default;
   RangeSet(const IndexedSeq<Interval> &intervals);
   RangeSet(const std::initializer_list<Interval> intervals);
   RangeSet(const std::initializer_list<T> Ts);
-  static IndexedSeq<Interval> constructIntervals(
-      const std::initializer_list<T> Ts);
 
  private:
-  const IndexedSeq<Interval> elements;
   static T saturatingIncrement(T elem);
   static T saturatingDecrement(T elem);
   static IndexedSeq<Interval> collectInCommon(IndexedSeq<Interval> rangeA,
                                               IndexedSeq<Interval> rangeB);
   static IndexedSeq<Interval> order(IndexedSeq<Interval> seq);
+  const IndexedSeq<Interval> elements;
 };
 
 class CharSet : public RangeSet<char, CharSet> {
@@ -86,19 +86,7 @@ class CharSet : public RangeSet<char, CharSet> {
   static const char minValue = 'A';  // STUB
   static const char maxValue = 'z';  // STUB
   static const char one = 1;         // STUB
-
- protected:
- private:
 };
-
-template <class T, class D>
-inline bool RangeSet<T, D>::contains(const T &elem) const {
-  for (const Interval &interval : elements) {
-    if (elem >= std::get<0>(interval) && elem <= std::get<1>(interval))
-      return true;
-  }
-  return false;
-}
 
 template <class T, class D>
 inline D RangeSet<T, D>::operator|(const D &other) const {
@@ -150,6 +138,15 @@ inline D RangeSet<T, D>::operator!() const {
 }
 
 template <class T, class D>
+inline bool RangeSet<T, D>::contains(const T &elem) const {
+  for (const Interval &interval : elements) {
+    if (elem >= std::get<0>(interval) && elem <= std::get<1>(interval))
+      return true;
+  }
+  return false;
+}
+
+template <class T, class D>
 inline std::optional<T> RangeSet<T, D>::minElement() const {
   if (elements.empty())
     return {};
@@ -165,6 +162,16 @@ inline bool RangeSet<T, D>::isEmpty() const {
 template <class T, class D>
 inline bool RangeSet<T, D>::equals(const RangeSet<T, D> &other) const {
   return *this == other;
+}
+
+template <class T, class D>
+inline IndexedSeq<typename RangeSet<T, D>::Interval>
+RangeSet<T, D>::constructIntervals(const std::initializer_list<T> Ts) {
+  IndexedSeq<Interval> intervals;
+  for (const auto &elem : Ts) {
+    intervals.push_back(Interval(elem, elem));
+  }
+  return intervals;
 }
 
 template <class T, class D>
@@ -208,16 +215,6 @@ inline std::string RangeSet<T, D>::toString() const {
     ss << '}';
     return ss.str();
   }
-}
-
-template <class T, class D>
-inline IndexedSeq<typename RangeSet<T, D>::Interval>
-RangeSet<T, D>::constructIntervals(const std::initializer_list<T> Ts) {
-  IndexedSeq<Interval> intervals;
-  for (const auto &elem : Ts) {
-    intervals.push_back(Interval(elem, elem));
-  }
-  return intervals;
 }
 
 template <class T, class D>
