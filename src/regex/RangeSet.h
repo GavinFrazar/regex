@@ -16,6 +16,16 @@ namespace Regex {
 template <typename E>
 using IndexedSeq = std::deque<E>;
 
+// forward declare templates
+template <class T, class D>
+class RangeSet;
+template <class T, class D>
+bool operator==(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
+template <class T, class D>
+bool operator!=(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
+template <class T, class D>
+std::ostream &operator<<(std::ostream &os, const RangeSet<T, D> &m);
+
 template <class T, class D>
 class RangeSet {
  public:
