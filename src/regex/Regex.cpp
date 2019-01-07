@@ -17,7 +17,9 @@ std::string Chars::toString() const {
 
 Concatenate::Concatenate(const Regex& a, const Regex& b) : a(a), b(b) {}
 
-std::string Concatenate::toString() const { return std::string(); }
+std::string Concatenate::toString() const {
+  return a.toString() + " ~ " + b.toString();
+}
 
 Union::Union(const Regex& a, const Regex& b) : a(a), b(b) {}
 

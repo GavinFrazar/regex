@@ -24,7 +24,6 @@ SCENARIO("Representing Regex as a string") {
       THEN("The string will be the symbol for nullset") { REQUIRE(s == "Ø"); }
     }
   }
-
   GIVEN("A Concatenation regex") {
     Chars a{'a'};
     Chars b{'b'};
