@@ -3,7 +3,9 @@ set(LIB_HEADERS
 RangeSet.h
 )
 set(LIB_SOURCES
+${INCLUDE_PATH}/Regex.h
 RangeSet.cpp
+Regex.cpp
 )
 # set(APP_HEADERS)
 # set(APP_SOURCES)

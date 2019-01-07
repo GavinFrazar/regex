@@ -1,5 +1,6 @@
 set(UNIT_TEST_LIST
   RangeSetSpec
+  RegexSpec
   )
  
 foreach(NAME IN LISTS UNIT_TEST_LIST)
