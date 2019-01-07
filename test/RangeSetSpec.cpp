@@ -66,9 +66,9 @@ SCENARIO("Taking the complement of a CharSet") {
     WHEN("The complement of the CharSet is taken") {
       CharSet comp = !cs;
       THEN("The complement does not contain any char in the original CharSet") {
-        REQUIRE(!comp.contains('a'));
-        REQUIRE(!comp.contains('c'));
-        REQUIRE(!comp.contains('e'));
+        REQUIRE_FALSE(comp.contains('a'));
+        REQUIRE_FALSE(comp.contains('c'));
+        REQUIRE_FALSE(comp.contains('e'));
       }
       THEN("The complement contains every char not in the original CharSet") {
         for (char c = CharSet::minValue; c != 'a'; c += CharSet::one) {
