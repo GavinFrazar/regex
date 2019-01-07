@@ -77,8 +77,8 @@ class CharSet : public RangeSet<char, CharSet> {
  public:
   CharSet() = default;
   explicit CharSet(const IndexedSeq<Interval> &intervals);
-  explicit CharSet(const std::initializer_list<Interval> intervals);
-  explicit CharSet(const std::initializer_list<char> chars);
+  CharSet(const std::initializer_list<Interval> intervals);
+  CharSet(const std::initializer_list<char> chars);
   CharSet(const CharSet &rhs) = default;
   CharSet &operator=(const CharSet &rhs) = default;
   CharSet &operator=(CharSet &&rhs) = delete;
