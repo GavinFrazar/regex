@@ -170,6 +170,7 @@ inline std::string RangeSet<T, D>::toString() {
   } else {
     using std::tie;
     std::stringstream ss;
+    ss << '{';
     std::for_each(elements.begin(), elements.end() - 1,
                   [&ss](const auto &interval) -> void {
                     T a;
@@ -188,6 +189,7 @@ inline std::string RangeSet<T, D>::toString() {
       ss << a;
     else
       ss << elements.back().toString();
+    ss << '}';
     return ss.str();
   }
 }

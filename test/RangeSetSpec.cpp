@@ -90,7 +90,7 @@ SCENARIO("Taking the complement of a CharSet") {
         for (char c = CharSet::minValue; c <= CharSet::maxValue;
              c += CharSet::one) {
           REQUIRE(comp.contains(c));
-}
+        }
       }
     }
   }
@@ -119,11 +119,11 @@ SCENARIO("Find the minimum char in a CharSet") {
 SCENARIO("Print a CharSet") {
   GIVEN("A CharSet with some chars") {
     using Interval = CharSet::Interval;
-    CharSet cs({Interval('a', 'b'), Interval('e', 'e'), Interval('g', 'x')});
+    CharSet cs({Interval('a', 'b'), Interval('g', 'x'), Interval('e', 'e')});
     WHEN("The CharSet is converted to a string representation") {
       std::string s = cs.toString();
       THEN("The string will correctly describe the CharSet") {
-        REQUIRE(s == "(a,b), e, (g,x)");
+        REQUIRE(s == "{(a,b), e, (g,x)}");
       }
     }
   }
@@ -134,7 +134,7 @@ SCENARIO("Print a CharSet") {
       THEN(
           "The resulting string will have no unncessary delimters or "
           "parentheses") {
-        REQUIRE(s == "c");
+        REQUIRE(s == "{c}");
       }
     }
   }
