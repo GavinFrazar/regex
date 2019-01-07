@@ -30,6 +30,7 @@ class RangeSet {
       ss << '(' << a << "," << b << ')';
       return ss.str();
     }
+    operator std::string() { return this->toString(); }
   };
   // TODO: put these declarations in a proper order.
   bool contains(const T &elem) const;
