@@ -145,12 +145,12 @@ inline D RangeSet<T, D>::operator!() const {
     }
     newFirst.insert(newFirst.end(), newMiddle.begin(), newMiddle.end());
     newFirst.insert(newFirst.end(), newLast.begin(), newLast.end());
-    return construct(newFirst);
+    return D(newFirst);
   }
 }
 
 template <class T, class D>
-inline std::optional<T> RangeSet<T, D>::minElement() {
+inline std::optional<T> RangeSet<T, D>::minElement() const {
   if (elements.empty())
     return {};
   else
@@ -158,25 +158,29 @@ inline std::optional<T> RangeSet<T, D>::minElement() {
 }
 
 template <class T, class D>
-inline bool RangeSet<T, D>::isEmpty() {
+inline bool RangeSet<T, D>::isEmpty() const {
   return elements.empty();
 }
 
 template <class T, class D>
-inline bool RangeSet<T, D>::equals(const RangeSet<T, D> &other) {
+inline bool RangeSet<T, D>::equals(const RangeSet<T, D> &other) const {
   return *this == other;
 }
 
 template <class T, class D>
-inline RangeSet<T, D>::RangeSet(const IndexedSeq<Interval> &seq)
-    : contents(seq), elements(order(seq)) {}
+inline RangeSet<T, D>::RangeSet(const IndexedSeq<Interval> &intervals)
+    : elements(order(intervals)) {}
 
 template <class T, class D>
-inline RangeSet<T, D>::RangeSet(const IndexedSeq<T> &list)
-    : RangeSet(construct(list)) {}
+inline RangeSet<T, D>::RangeSet(const std::initializer_list<Interval> intervals)
+    : RangeSet(IndexedSeq<Interval>(intervals)) {}
 
 template <class T, class D>
-inline std::string RangeSet<T, D>::toString() {
+inline RangeSet<T, D>::RangeSet(const std::initializer_list<T> Ts)
+    : RangeSet(constructIntervals(Ts)) {}
+
+template <class T, class D>
+inline std::string RangeSet<T, D>::toString() const {
   if (this->isEmpty()) {
     return std::string();
   } else {
