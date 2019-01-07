@@ -31,23 +31,27 @@ class RangeSet {
       return ss.str();
     }
   };
-  bool contains(T elem);
-  D operator|(const D &other);
-  D operator&(const D &other);
-  D operator!();
-  std::optional<T> minElement();
-  bool isEmpty();
-  bool equals(const RangeSet<T, D> &other);
-  friend bool operator==(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
-  std::string toString();
-  const IndexedSeq<Interval> contents;
+  // TODO: put these declarations in a proper order.
+  bool contains(const T &elem) const;
+  D operator|(const D &other) const;
+  D operator&(const D &other) const;
+  D operator!() const;
+  std::optional<T> minElement() const;
+  bool isEmpty() const;
+  bool equals(const RangeSet<T, D> &other) const;
+  friend bool operator==
+      <T, D>(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
+  friend bool operator!=
+      <T, D>(const RangeSet<T, D> &lhs, const RangeSet<T, D> &rhs);
+  std::string toString() const;
 
  protected:
-  RangeSet() {}
-  RangeSet(const IndexedSeq<Interval> &seq);
-  RangeSet(const IndexedSeq<T> &list);
-  static IndexedSeq<Interval> construct(const IndexedSeq<T> &list);
-  virtual D construct(const IndexedSeq<Interval> &v) = 0;
+  RangeSet() = default;
+  RangeSet(const IndexedSeq<Interval> &intervals);
+  RangeSet(const std::initializer_list<Interval> intervals);
+  RangeSet(const std::initializer_list<T> Ts);
+  static IndexedSeq<Interval> constructIntervals(
+      const std::initializer_list<T> Ts);
 
  private:
   const IndexedSeq<Interval> elements;
