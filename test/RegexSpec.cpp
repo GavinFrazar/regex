@@ -1,4 +1,4 @@
-﻿#include <catch2/catch.hpp>
+#include <catch2/catch.hpp>
 
 #include "regex/Regex.h"
 using Regex::Chars;
@@ -21,7 +21,7 @@ SCENARIO("Representing Chars as a string") {
     Chars re;
     WHEN("The regex is coverted to a string") {
       auto s = re.toString();
-      THEN("The string will be the symbol for nullset") { REQUIRE(s == "∅"); }
+      THEN("The string will be the symbol for nullset") { REQUIRE(s == "Ø"); }
     }
   }
 }
