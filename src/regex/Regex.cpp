@@ -18,14 +18,15 @@ std::string Chars::toString() const {
 Concatenate::Concatenate(const Regex& a, const Regex& b) : a(a), b(b) {}
 
 std::string Concatenate::toString() const {
-  return a.toString() + " ~ " + b.toString();
+  return "(" + a.toString() + " ~ " + b.toString() + ")";
 }
 
 Union::Union(const Regex& a, const Regex& b) : a(a), b(b) {}
 
-std::string Union::toString() const { return std::string(); }
+  std::string Union::toString() const { return "(" + a.toString() + " | "
+      + b.toString() + ")";}
 
 KleeneStar::KleeneStar(const Regex& a) : a(a) {}
-std::string KleeneStar::toString() const { return std::string(); }
-std::string EmptyString::toString() const { return std::string(); }
+  std::string KleeneStar::toString() const { return "(" + a.toString() +")*"; }
+  std::string EmptyString::toString() const { return "ε"; }
 }  // namespace Regex
