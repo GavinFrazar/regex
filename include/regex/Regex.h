@@ -51,6 +51,11 @@ class EmptyString : public Regex {
   virtual std::string toString() const override;
 };
 
+ bool operator==(const Chars &a, const Chars &b);
+ bool operator==(const Concatenate &a, const Concatenate &b);
+ bool operator==(const Union &a, const Union &b);
+ bool operator==(const KleeneStar &a, const KleeneStar &b);
+
 }  // namespace Regex
 
 #endif

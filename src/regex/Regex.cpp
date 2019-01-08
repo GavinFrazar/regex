@@ -33,4 +33,18 @@ Union::Union(const Regex& a, const Regex& b) : a(a), b(b) {}
 KleeneStar::KleeneStar(const Regex& a) : a(a) {}
   std::string KleeneStar::toString() const { return "(" + a.toString() +")*"; }
   std::string EmptyString::toString() const { return "ε"; }
+
+  bool operator==(const Chars &a, const Chars &b){
+    return a.chars == b.chars;
+  }
+  bool operator==(const Concatenate &a, const Concatenate &b){
+    return a.a == b.a && a.b == b.b;
+  }
+  bool operator==(const Union &a, const Union &b){
+    return a.a == b.a && a.b == b.b;
+  }
+  bool operator==(const KleeneStar &a, const KleeneStar &b){
+    return a.a == b.a;
+  }
+
 }  // namespace Regex
