@@ -8,6 +8,8 @@ using Regex::KleeneStar;
 using Regex::Union;
 
 SCENARIO("Representing Regex as a string") {
+  Chars a{'a'};
+  Chars b{'b'};
   GIVEN("A Chars regex with some chars") {
     Chars re{'a', 'b', 'c'};
     WHEN("The regex is coverted to a string") {
@@ -24,14 +26,21 @@ SCENARIO("Representing Regex as a string") {
       THEN("The string will be the symbol for nullset") { REQUIRE(s == "Ø"); }
     }
   }
-  GIVEN("A Concatenation regex") {
-    Chars a{'a'};
-    Chars b{'b'};
+  GIVEN("A Concatenation of Char regex") {
     Concatenate re(a, b);
-    WHEN("The concat retgex is converted to a string") {
+    WHEN("The concat regex is converted to a string") {
       auto s = re.toString();
       THEN("The string will be the concatenation of the a and b Chars") {
         REQUIRE(s == "{a} ~ {b}");
+      }
+    }
+  }
+  GIVEN("A Union of Char regex"){
+    Union re(a,b);
+    WHEN("The union regex is converted to a string"){
+      auto s = re.toString();
+      THEN("The string will be the union of the a and b Chars"){
+        REQUIRE(s == "{a} | {b}");
       }
     }
   }
