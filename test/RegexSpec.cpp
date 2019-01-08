@@ -53,4 +53,13 @@ SCENARIO("Representing Regex as a string") {
       }
     }
   }
+  GIVEN("The empty string regex"){
+    EmptyString re;
+    WHEN("The empty string regex is converted to a string"){
+      auto s = re.toString();
+      THEN("The string will be epsilon"){
+        REQUIRE(s == "ε");
+      }
+    }
+  }
 }
