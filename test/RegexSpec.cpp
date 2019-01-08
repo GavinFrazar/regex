@@ -23,7 +23,7 @@ SCENARIO("Representing Regex as a string") {
     Chars re;
     WHEN("The regex is converted to a string") {
       auto s = re.toString();
-      THEN("The string will be the symbol for nullset") { REQUIRE(s == "Ø"); }
+      THEN("The string will be the symbol for nullset") { REQUIRE(s == "∅"); }
     }
   }
   GIVEN("A Concatenation of Char regex") {

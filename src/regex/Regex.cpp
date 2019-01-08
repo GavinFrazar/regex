@@ -5,11 +5,15 @@ Chars::Chars() : chars() {}
 
 Chars::Chars(std::initializer_list<char> chars) : chars(CharSet(chars)) {}
 
+Chars::Chars(std::initializer_list<CharSet::Interval> intervals)
+  : chars(CharSet(intervals))
+{}
+
 Chars::Chars(const CharSet& chars) : chars(chars) {}
 
 std::string Chars::toString() const {
   if (chars.isEmpty()) {
-    return "Ø";
+    return "∅";
   } else {
     return chars.toString();
   }

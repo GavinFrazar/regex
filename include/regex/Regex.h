@@ -15,6 +15,7 @@ class Chars : public Regex {
  public:
   Chars();
   Chars(std::initializer_list<char> chars);
+  Chars(std::initializer_list<CharSet::Interval> intervals);
   explicit Chars(const CharSet &chars);
   const CharSet chars;
   virtual std::string toString() const override;
