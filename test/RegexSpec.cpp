@@ -31,7 +31,7 @@ SCENARIO("Representing Regex as a string") {
     WHEN("The concat regex is converted to a string") {
       auto s = re.toString();
       THEN("The string will be the concatenation of the a and b Chars") {
-        REQUIRE(s == "{a} ~ {b}");
+        REQUIRE(s == "({a} ~ {b})");
       }
     }
   }
@@ -40,7 +40,16 @@ SCENARIO("Representing Regex as a string") {
     WHEN("The union regex is converted to a string"){
       auto s = re.toString();
       THEN("The string will be the union of the a and b Chars"){
-        REQUIRE(s == "{a} | {b}");
+        REQUIRE(s == "({a} | {b})");
+      }
+    }
+  }
+  GIVEN("A KleeneStar of a Char"){
+    KleeneStar re(a);
+    WHEN("The KleeneStar regex is converted to a string"){
+      auto s = re.toString();
+      THEN("The string will be the kleenestar of the a Char"){
+        REQUIRE(s == "({a})*");
       }
     }
   }
