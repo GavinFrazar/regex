@@ -1,6 +1,7 @@
 #include <catch2/catch.hpp>
 
-#include "../src/regex/RangeSet.h"
+#include "regex/RangeSet.h"
+
 using Regex::CharSet;
 
 SCENARIO("CharSets can determine correctly whether they contain a char") {
