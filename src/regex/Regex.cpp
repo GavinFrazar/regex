@@ -26,8 +26,24 @@ bool Chars::equals(const Regex &other) const {
 Concatenate::Concatenate(const Regex &a, const Regex &b)
     : a(a.clone()), b(b.clone()) {}
 
-Concatenate::Concatenate(const Concatenate &other)
-    : a(other.a->clone()), b(other.b->clone()) {}
+Concatenate::Concatenate() {}
+
+Concatenate::Concatenate(const Concatenate &other) : a(other.a), b(other.b) {}
+
+void swap(Concatenate &a, Concatenate &b) {
+  using std::swap;  // so we can use ADL
+  swap(a.a, b.a);
+  swap(a.b, b.b);
+}
+
+Concatenate &Concatenate::operator=(Concatenate other) {
+  swap(*this, other);
+  return *this;
+}
+
+Concatenate::Concatenate(Concatenate &&other) : Concatenate() {
+  swap(*this, other);
+}
 
 std::string Concatenate::toString() const {
   return "(" + a->toString() + " ~ " + b->toString() + ")";
@@ -40,22 +56,22 @@ bool Concatenate::equals(const Regex &other) const {
 
 Union::Union(const Regex &a, const Regex &b) : a(a.clone()), b(b.clone()) {}
 
-Union::Union(const Union &other) : a(other.a->clone()), b(other.b->clone()) {}
+Union::Union(const Union &other) : a(other.a), b(other.b) {}
 
 std::string Union::toString() const {
   return "(" + a->toString() + " | " + b->toString() + ")";
 }
 
-unique_ptr<Regex> Union::clone() const {
-  return unique_ptr<Union>(new Union(*this));
+shared_ptr<Regex> Union::clone() const {
+  return shared_ptr<Union>(new Union(*this));
 }
 
 KleeneStar::KleeneStar(const Regex &a) : a(a.clone()) {}
 
-KleeneStar::KleeneStar(const KleeneStar &other) : a(other.a->clone()) {}
+KleeneStar::KleeneStar(const KleeneStar &other) : a(other.a) {}
 
-unique_ptr<Regex> KleeneStar::clone() const {
-  return unique_ptr<KleeneStar>(new KleeneStar(*this));
+shared_ptr<Regex> KleeneStar::clone() const {
+  return shared_ptr<KleeneStar>(new KleeneStar(*this));
 }
 
 std::string KleeneStar::toString() const { return "(" + a->toString() + ")*"; }
@@ -69,9 +85,10 @@ bool operator==(const Regex &a, const Regex &b) {
   return false;
 }
 
-bool operator==(const unique_ptr<Regex> &a, const unique_ptr<Regex> &b) {
+bool operator==(const shared_ptr<Regex> &a, const shared_ptr<Regex> &b) {
   return *a == *b;
 }
+
 bool operator==(const Chars &a, const Chars &b) { return a.chars == b.chars; }
 
 bool operator==(const Concatenate &a, const Concatenate &b) {
