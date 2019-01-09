@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 
+#include <iostream>
 #include "regex/Regex.h"
 using Regex::Chars;
 using Regex::Concatenate;
@@ -35,31 +36,56 @@ SCENARIO("Representing Regex as a string") {
       }
     }
   }
-  GIVEN("A Union of Char regex"){
-    Union re(a,b);
-    WHEN("The union regex is converted to a string"){
+  GIVEN("A Union of Char regex") {
+    Union re(a, b);
+    WHEN("The union regex is converted to a string") {
       auto s = re.toString();
-      THEN("The string will be the union of the a and b Chars"){
+      THEN("The string will be the union of the a and b Chars") {
         REQUIRE(s == "({a} | {b})");
       }
     }
   }
-  GIVEN("A KleeneStar of a Char"){
+  GIVEN("A KleeneStar of a Char") {
     KleeneStar re(a);
-    WHEN("The KleeneStar regex is converted to a string"){
+    WHEN("The KleeneStar regex is converted to a string") {
       auto s = re.toString();
-      THEN("The string will be the kleenestar of the a Char"){
+      THEN("The string will be the kleenestar of the a Char") {
         REQUIRE(s == "({a})*");
       }
     }
   }
-  GIVEN("The empty string regex"){
+  GIVEN("The empty string regex") {
     EmptyString re;
-    WHEN("The empty string regex is converted to a string"){
+    WHEN("The empty string regex is converted to a string") {
       auto s = re.toString();
-      THEN("The string will be epsilon"){
-        REQUIRE(s == "ε");
-      }
+      THEN("The string will be epsilon") { REQUIRE(s == "ε"); }
+    }
+  }
+}
+
+SCENARIO("Comparing two regex for equality") {
+  GIVEN("Two Char regex") {
+    Chars a{'a'};
+    Chars b{'b'};
+    WHEN("Chars a is compared with a") {
+      bool equal = a == a;
+      THEN("The regex should be equal") { REQUIRE(equal); }
+    }
+    WHEN("Chars a is compared with b") {
+      bool equal = a == b;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+  }
+  GIVEN("Two Concatenate regex") {
+    Concatenate re1(Chars{'a'}, Chars{'a'});
+    Concatenate re2(Chars{'b'}, Chars{'b'});
+    WHEN("re1 is compared with re1") {
+      bool equal = re1 == re1;
+      THEN("The regex should be equal") { REQUIRE(equal); }
+    }
+    WHEN("re1 is compared with re2") {
+      bool equal = re1 == re2;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
     }
   }
 }
