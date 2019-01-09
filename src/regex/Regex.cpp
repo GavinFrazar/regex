@@ -3,6 +3,8 @@
 namespace Regex {
 Chars::Chars() : chars() {}
 
+Chars::Chars(const Chars &other) : chars(other.chars) {}
+
 Chars::Chars(std::initializer_list<char> chars) : chars(CharSet(chars)) {}
 
 Chars::Chars(std::initializer_list<CharSet::Interval> intervals)
@@ -16,6 +18,10 @@ std::string Chars::toString() const {
   } else {
     return chars.toString();
   }
+}
+
+shared_ptr<Regex> Chars::clone() const {
+  return shared_ptr<Chars>(new Chars(*this));
 }
 
 bool Chars::equals(const Regex &other) const {
@@ -47,6 +53,10 @@ Concatenate::Concatenate(Concatenate &&other) : Concatenate() {
 
 std::string Concatenate::toString() const {
   return "(" + a->toString() + " ~ " + b->toString() + ")";
+}
+
+shared_ptr<Regex> Concatenate::clone() const {
+  return shared_ptr<Concatenate>(new Concatenate(*this));
 }
 
 bool Concatenate::equals(const Regex &other) const {

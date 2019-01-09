@@ -9,6 +9,11 @@
 #include "../../src/regex/RangeSet.h"
 
 namespace Regex {
+/*
+ *Abstract Regex class
+ *Derived classes must implement a toString, clone, and equals method to get a
+ *concrete class.
+ */
 class Regex {
  public:
   virtual std::string toString() const = 0;
@@ -20,55 +25,51 @@ using std::shared_ptr;
 class Chars : public Regex {
  public:
   Chars();
-  Chars(const Chars &other) : chars(other.chars) {}
+  Chars(const Chars &other);
   Chars(std::initializer_list<char> chars);
   Chars(std::initializer_list<CharSet::Interval> intervals);
   explicit Chars(const CharSet &chars);
-  const CharSet chars;
   virtual std::string toString() const override;
-  virtual shared_ptr<Regex> clone() const override {
-    return shared_ptr<Chars>(new Chars(*this));
-  }
+  virtual shared_ptr<Regex> clone() const override;
   virtual bool equals(const Regex &other) const override;
+  const CharSet chars;
 };
 
 class Concatenate : public Regex {
  public:
   Concatenate();                                     // default
   Concatenate(const Concatenate &other);             // copy
-  friend void swap(Concatenate &a, Concatenate &b);  // swap
-  Concatenate &operator=(Concatenate other);         // assignment
   Concatenate(Concatenate &&other);                  // move
   Concatenate(const Regex &a, const Regex &b);
   Concatenate(shared_ptr<Regex> a, shared_ptr<Regex> b);
-  shared_ptr<Regex> a, b;
+  friend void swap(Concatenate &a, Concatenate &b);  // swap
+  Concatenate &operator=(Concatenate other);         // assignment
   virtual std::string toString() const override;
-  virtual shared_ptr<Regex> clone() const override {
-    return shared_ptr<Concatenate>(new Concatenate(*this));
-  }
+  virtual shared_ptr<Regex> clone() const override;
   virtual bool equals(const Regex &other) const override;
+  shared_ptr<Regex> a, b;
 };
 
 class Union : public Regex {
  public:
   Union(const Regex &a, const Regex &b);
   Union(const Union &other);
-  shared_ptr<Regex> a, b;
   virtual std::string toString() const override;
   shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
+  shared_ptr<Regex> a, b;
 };
 
 class KleeneStar : public Regex {
  public:
   KleeneStar(const Regex &a);
   KleeneStar(const KleeneStar &other);
-  shared_ptr<Regex> a;
   virtual std::string toString() const override;
   shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
+  shared_ptr<Regex> a;
 };
 
 // TODO: Make this a singleton.
