@@ -4,12 +4,10 @@
 #include <initializer_list>
 #include <memory>
 #include <string>
-#include <typeinfo>
 #include "regex/RangeSet.h"
 #include "regex/Wrapper.h"
 
 namespace Regex {
-using std::shared_ptr;
 /*
  *Abstract Regex class
  *Derived classes must implement a toString, clone, and equals method to get a
@@ -30,7 +28,7 @@ class Chars : public Regex {
   Chars(std::initializer_list<CharSet::Interval> intervals);
   explicit Chars(const CharSet &chars);
   virtual std::string toString() const override;
-  virtual shared_ptr<Regex> clone() const override;
+  virtual std::shared_ptr<Regex> clone() const override;
   virtual bool equals(const Regex &other) const override;
   const CharSet chars;
 };
@@ -39,7 +37,7 @@ class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
  public:
   using TwoMembers<Regex, Concatenate>::TwoMembers;
   virtual std::string toString() const override;
-  virtual shared_ptr<Regex> clone() const override;
+  virtual std::shared_ptr<Regex> clone() const override;
   virtual bool equals(const Regex &other) const override;
 };
 
@@ -47,7 +45,7 @@ class Union : public Regex, public TwoMembers<Regex, Union> {
  public:
   using TwoMembers<Regex, Union>::TwoMembers;
   virtual std::string toString() const override;
-  shared_ptr<Regex> clone() const override;
+  std::shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
 };
@@ -56,7 +54,7 @@ class KleeneStar : public Regex, public OneMember<Regex, KleeneStar> {
  public:
   using OneMember<Regex, KleeneStar>::OneMember;
   virtual std::string toString() const override;
-  shared_ptr<Regex> clone() const override;
+  std::shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
 };
@@ -66,9 +64,9 @@ class EmptyString : public Regex {
  public:
   EmptyString() = default;
   virtual std::string toString() const override;
-  virtual shared_ptr<Regex> clone() const override {
+  virtual std::shared_ptr<Regex> clone() const override {
     // STUB
-    return shared_ptr<Regex>();
+    return std::shared_ptr<Regex>();
   }
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }

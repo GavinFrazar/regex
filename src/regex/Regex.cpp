@@ -1,6 +1,10 @@
 #include "regex/Regex.h"
 
+#include <typeinfo>
+
 namespace Regex {
+using std::shared_ptr;
+
 Chars::Chars() : chars() {}
 
 Chars::Chars(const Chars &other) : chars(other.chars) {}
