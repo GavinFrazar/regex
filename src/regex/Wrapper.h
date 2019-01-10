@@ -6,20 +6,10 @@
 namespace Regex {
 
 using std::shared_ptr;
-template <class B, class D>
-class OneMember {
- public:
-  OneMember();
-  OneMember(const OneMember<B, D> &other);
-  OneMember(OneMember &&other) = delete;
-  OneMember(const B &a);
-  const shared_ptr<const B> a;
-};
 
 template <class B, class D>
 class TwoMembers {
  public:
-  TwoMembers();                               // default
   TwoMembers(const TwoMembers<B, D> &other);  // copy
   TwoMembers(TwoMembers &&other) = delete;    // move
   TwoMembers(const B &a, const B &b);
@@ -27,18 +17,6 @@ class TwoMembers {
   friend bool operator==(const TwoMembers<B, D> &a, const TwoMembers<B, D> &b);
   const shared_ptr<const B> a, b;
 };
-
-template <class B, class D>
-inline OneMember<B, D>::OneMember() {}
-
-template <class B, class D>
-inline OneMember<B, D>::OneMember(const OneMember<B, D> &other) : a(other.a) {}
-
-template <class B, class D>
-inline OneMember<B, D>::OneMember(const B &a) : a(a.clone()) {}
-
-template <class B, class D>
-inline TwoMembers<B, D>::TwoMembers() {}
 
 template <class B, class D>
 inline TwoMembers<B, D>::TwoMembers(const TwoMembers<B, D> &other)

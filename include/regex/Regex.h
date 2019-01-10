@@ -50,13 +50,18 @@ class Union : public Regex, public TwoMembers<Regex, Union> {
   virtual bool equals(const Regex &other) const override { return true; }
 };
 
-class KleeneStar : public Regex, public OneMember<Regex, KleeneStar> {
+class KleeneStar : public Regex {
  public:
-  using OneMember<Regex, KleeneStar>::OneMember;
+  KleeneStar(const KleeneStar &other);
+  KleeneStar(const Regex &re);
   virtual std::string toString() const override;
   std::shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
+  std::shared_ptr<Regex> a;
+
+ protected:
+  KleeneStar(const std::shared_ptr<Regex> &sptr);
 };
 
 // TODO: Make this a singleton.

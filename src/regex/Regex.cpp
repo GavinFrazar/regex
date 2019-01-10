@@ -54,11 +54,17 @@ shared_ptr<Regex> Union::clone() const {
   return shared_ptr<Union>(new Union(*this));
 }
 
+KleeneStar::KleeneStar(const KleeneStar &other) : KleeneStar(other.clone()) {}
+
+KleeneStar::KleeneStar(const Regex &re) : a(re.clone()) {}
+
 shared_ptr<Regex> KleeneStar::clone() const {
-  return shared_ptr<KleeneStar>(new KleeneStar(*this));
+  return shared_ptr<KleeneStar>(new KleeneStar(a));
 }
 
 std::string KleeneStar::toString() const { return "(" + a->toString() + ")*"; }
+
+KleeneStar::KleeneStar(const shared_ptr<Regex> &sptr) : a(sptr) {}
 
 std::string EmptyString::toString() const { return "ε"; }
 
