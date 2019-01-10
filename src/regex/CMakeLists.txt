@@ -1,6 +1,7 @@
 set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/regex)
 set(LIB_HEADERS
 RangeSet.h
+Wrapper.h
 )
 set(LIB_SOURCES
 ${INCLUDE_PATH}/Regex.h
