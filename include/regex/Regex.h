@@ -75,7 +75,6 @@ class EmptyString : public Regex {
 };
 
 bool operator==(const Regex &a, const Regex &b);
-bool operator==(const shared_ptr<Regex> &a, const shared_ptr<Regex> &b);
 bool operator==(const Chars &a, const Chars &b);
 bool operator==(const Concatenate &a, const Concatenate &b);
 bool operator==(const Union &a, const Union &b);

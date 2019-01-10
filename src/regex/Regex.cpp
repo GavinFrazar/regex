@@ -65,18 +65,14 @@ bool operator==(const Regex &a, const Regex &b) {
   return false;
 }
 
-bool operator==(const shared_ptr<Regex> &a, const shared_ptr<Regex> &b) {
-  return *a == *b;
-}
-
 bool operator==(const Chars &a, const Chars &b) { return a.chars == b.chars; }
 
 bool operator==(const Concatenate &a, const Concatenate &b) {
-  return *(a.a) == *(b.a) && *(a.b) == *(b.b);
+  return (*a.a == *b.a) && (*a.b == *b.b);
 }
 
 bool operator==(const Union &a, const Union &b) {
-  return *(a.a) == *(b.a) && *(a.b) == *(b.b);
+  return (*a.a == *b.a) && (*a.b == *b.b);
 }
 
 bool operator==(const KleeneStar &a, const KleeneStar &b) {
