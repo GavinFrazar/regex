@@ -29,28 +29,6 @@ bool Chars::equals(const Regex &other) const {
   return *this == other_derived;
 }
 
-Concatenate::Concatenate(const Regex &a, const Regex &b)
-    : a(a.clone()), b(b.clone()) {}
-
-Concatenate::Concatenate() {}
-
-Concatenate::Concatenate(const Concatenate &other) : a(other.a), b(other.b) {}
-
-void swap(Concatenate &a, Concatenate &b) {
-  using std::swap;  // so we can use ADL
-  swap(a.a, b.a);
-  swap(a.b, b.b);
-}
-
-Concatenate &Concatenate::operator=(Concatenate other) {
-  swap(*this, other);
-  return *this;
-}
-
-Concatenate::Concatenate(Concatenate &&other) : Concatenate() {
-  swap(*this, other);
-}
-
 std::string Concatenate::toString() const {
   return "(" + a->toString() + " ~ " + b->toString() + ")";
 }
@@ -64,10 +42,6 @@ bool Concatenate::equals(const Regex &other) const {
   return *this == other_derived;
 }
 
-Union::Union(const Regex &a, const Regex &b) : a(a.clone()), b(b.clone()) {}
-
-Union::Union(const Union &other) : a(other.a), b(other.b) {}
-
 std::string Union::toString() const {
   return "(" + a->toString() + " | " + b->toString() + ")";
 }
@@ -75,10 +49,6 @@ std::string Union::toString() const {
 shared_ptr<Regex> Union::clone() const {
   return shared_ptr<Union>(new Union(*this));
 }
-
-KleeneStar::KleeneStar(const Regex &a) : a(a.clone()) {}
-
-KleeneStar::KleeneStar(const KleeneStar &other) : a(other.a) {}
 
 shared_ptr<Regex> KleeneStar::clone() const {
   return shared_ptr<KleeneStar>(new KleeneStar(*this));
@@ -102,7 +72,7 @@ bool operator==(const shared_ptr<Regex> &a, const shared_ptr<Regex> &b) {
 bool operator==(const Chars &a, const Chars &b) { return a.chars == b.chars; }
 
 bool operator==(const Concatenate &a, const Concatenate &b) {
-  return *(a.a) == *(b.a);
+  return *(a.a) == *(b.a) && *(a.b) == *(b.b);
 }
 
 bool operator==(const Union &a, const Union &b) {

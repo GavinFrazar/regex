@@ -2,13 +2,14 @@
 #define REGEX_REGEX_H
 
 #include <initializer_list>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <typeinfo>
-#include "../../src/regex/RangeSet.h"
+#include "regex/RangeSet.h"
+#include "regex/Wrapper.h"
 
 namespace Regex {
+using std::shared_ptr;
 /*
  *Abstract Regex class
  *Derived classes must implement a toString, clone, and equals method to get a
@@ -21,7 +22,6 @@ class Regex {
   virtual bool equals(const Regex &other) const = 0;
 };
 
-using std::shared_ptr;
 class Chars : public Regex {
  public:
   Chars();
@@ -35,41 +35,30 @@ class Chars : public Regex {
   const CharSet chars;
 };
 
-class Concatenate : public Regex {
+class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
  public:
-  Concatenate();                                     // default
-  Concatenate(const Concatenate &other);             // copy
-  Concatenate(Concatenate &&other);                  // move
-  Concatenate(const Regex &a, const Regex &b);
-  Concatenate(shared_ptr<Regex> a, shared_ptr<Regex> b);
-  friend void swap(Concatenate &a, Concatenate &b);  // swap
-  Concatenate &operator=(Concatenate other);         // assignment
+  using TwoMembers<Regex, Concatenate>::TwoMembers;
   virtual std::string toString() const override;
   virtual shared_ptr<Regex> clone() const override;
   virtual bool equals(const Regex &other) const override;
-  shared_ptr<Regex> a, b;
 };
 
-class Union : public Regex {
+class Union : public Regex, public TwoMembers<Regex, Union> {
  public:
-  Union(const Regex &a, const Regex &b);
-  Union(const Union &other);
+  using TwoMembers<Regex, Union>::TwoMembers;
   virtual std::string toString() const override;
   shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
-  shared_ptr<Regex> a, b;
 };
 
-class KleeneStar : public Regex {
+class KleeneStar : public Regex, public OneMember<Regex, KleeneStar> {
  public:
-  KleeneStar(const Regex &a);
-  KleeneStar(const KleeneStar &other);
+  using OneMember<Regex, KleeneStar>::OneMember;
   virtual std::string toString() const override;
   shared_ptr<Regex> clone() const override;
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
-  shared_ptr<Regex> a;
 };
 
 // TODO: Make this a singleton.
