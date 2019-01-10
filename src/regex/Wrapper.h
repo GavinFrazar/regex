@@ -13,8 +13,6 @@ class TwoMembers {
   TwoMembers(const TwoMembers<B, D> &other);  // copy
   TwoMembers(TwoMembers &&other) = delete;    // move
   TwoMembers(const B &a, const B &b);
-  template <class BASE, class DERIVED>
-  friend bool operator==(const TwoMembers<B, D> &a, const TwoMembers<B, D> &b);
   const shared_ptr<const B> a, b;
 };
 

@@ -5,10 +5,6 @@
 namespace Regex {
 using std::shared_ptr;
 
-Chars::Chars() : chars() {}
-
-Chars::Chars(const Chars &other) : chars(other.chars) {}
-
 Chars::Chars(std::initializer_list<char> chars) : chars(CharSet(chars)) {}
 
 Chars::Chars(std::initializer_list<CharSet::Interval> intervals)
@@ -30,7 +26,7 @@ shared_ptr<Regex> Chars::clone() const {
 
 bool Chars::equals(const Regex &other) const {
   const Chars &other_derived = dynamic_cast<const Chars &>(other);
-  return *this == other_derived;
+  return chars == other_derived.chars;
 }
 
 std::string Concatenate::toString() const {
@@ -43,7 +39,7 @@ shared_ptr<Regex> Concatenate::clone() const {
 
 bool Concatenate::equals(const Regex &other) const {
   const Concatenate &other_derived = dynamic_cast<const Concatenate &>(other);
-  return *this == other_derived;
+  return (*a == *other_derived.a) && (*b == *other_derived.b);
 }
 
 std::string Union::toString() const {
@@ -52,6 +48,11 @@ std::string Union::toString() const {
 
 shared_ptr<Regex> Union::clone() const {
   return shared_ptr<Union>(new Union(*this));
+}
+
+bool Union::equals(const Regex &other) const {
+  const Union &other_derived = dynamic_cast<const Union &>(other);
+  return (*a == *other_derived.a) && (*b == *other_derived.b);
 }
 
 KleeneStar::KleeneStar(const KleeneStar &other) : KleeneStar(other.clone()) {}
@@ -75,18 +76,6 @@ bool operator==(const Regex &a, const Regex &b) {
   return false;
 }
 
-bool operator==(const Chars &a, const Chars &b) { return a.chars == b.chars; }
-
-bool operator==(const Concatenate &a, const Concatenate &b) {
-  return (*a.a == *b.a) && (*a.b == *b.b);
-}
-
-bool operator==(const Union &a, const Union &b) {
-  return (*a.a == *b.a) && (*a.b == *b.b);
-}
-
-bool operator==(const KleeneStar &a, const KleeneStar &b) {
-  return *(a.a) == *(b.a);
-}
+bool operator!=(const Regex &a, const Regex &b) { return !(a == b); }
 
 }  // namespace Regex

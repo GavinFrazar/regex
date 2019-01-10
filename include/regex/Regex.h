@@ -22,15 +22,17 @@ class Regex {
 
 class Chars : public Regex {
  public:
-  Chars();
-  Chars(const Chars &other);
+  Chars() = default;
+  Chars(const Chars &other) = default;
   Chars(std::initializer_list<char> chars);
   Chars(std::initializer_list<CharSet::Interval> intervals);
   explicit Chars(const CharSet &chars);
   virtual std::string toString() const override;
   virtual std::shared_ptr<Regex> clone() const override;
-  virtual bool equals(const Regex &other) const override;
   const CharSet chars;
+
+ protected:
+  virtual bool equals(const Regex &other) const override;
 };
 
 class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
@@ -38,6 +40,8 @@ class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
   using TwoMembers<Regex, Concatenate>::TwoMembers;
   virtual std::string toString() const override;
   virtual std::shared_ptr<Regex> clone() const override;
+
+ protected:
   virtual bool equals(const Regex &other) const override;
 };
 
@@ -46,8 +50,10 @@ class Union : public Regex, public TwoMembers<Regex, Union> {
   using TwoMembers<Regex, Union>::TwoMembers;
   virtual std::string toString() const override;
   std::shared_ptr<Regex> clone() const override;
+
+ protected:
   // STUB
-  virtual bool equals(const Regex &other) const override { return true; }
+  virtual bool equals(const Regex &other) const override;
 };
 
 class KleeneStar : public Regex {
@@ -56,9 +62,11 @@ class KleeneStar : public Regex {
   KleeneStar(const Regex &re);
   virtual std::string toString() const override;
   std::shared_ptr<Regex> clone() const override;
+  std::shared_ptr<Regex> a;
+
+ protected:
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
-  std::shared_ptr<Regex> a;
 
  protected:
   KleeneStar(const std::shared_ptr<Regex> &sptr);
@@ -73,16 +81,17 @@ class EmptyString : public Regex {
     // STUB
     return std::shared_ptr<Regex>();
   }
+
+ protected:
   // STUB
   virtual bool equals(const Regex &other) const override { return true; }
 };
 
 bool operator==(const Regex &a, const Regex &b);
-bool operator==(const Chars &a, const Chars &b);
-bool operator==(const Concatenate &a, const Concatenate &b);
-bool operator==(const Union &a, const Union &b);
-bool operator==(const KleeneStar &a, const KleeneStar &b);
+
+bool operator!=(const Regex &a, const Regex &b);
 
 }  // namespace Regex
 
 #endif
+
