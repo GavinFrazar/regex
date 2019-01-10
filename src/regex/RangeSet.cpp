@@ -1,4 +1,4 @@
-#include "RangeSet.h"
+#include "regex/RangeSet.h"
 
 namespace Regex {
 CharSet::CharSet(const IndexedSeq<Interval>& intervals) : RangeSet(intervals) {}
