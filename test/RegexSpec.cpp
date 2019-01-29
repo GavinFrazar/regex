@@ -56,9 +56,9 @@ SCENARIO("Representing Regex as a string") {
     }
   }
   GIVEN("The empty string regex") {
-    EmptyString re;
+    auto re = EmptyString::getInstance();
     WHEN("The empty string regex is converted to a string") {
-      auto s = re.toString();
+      auto s = re->toString();
       THEN("The string will be epsilon") { REQUIRE(s == "ε"); }
     }
   }
@@ -141,6 +141,57 @@ SCENARIO("Comparing two regex for equality") {
     WHEN(re2.toString() + " is compared with " + re4.toString()) {
       bool equal = re2 == re4;
       THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+  }
+}
+
+SCENARIO("Determine if a regex is nullable") {
+  GIVEN("Some Regexes") {
+    Chars a = {'a'}, b = {'b'};
+    auto e = EmptyString::getInstance();
+    WHEN(b.toString() + " is tested for nullable") {
+      bool nullable = b.nullable();
+      THEN("The regex is not nullable") { REQUIRE_FALSE(nullable); }
+    }
+    WHEN("a is concatenated with b") {
+      Concatenate c(a, b);
+      THEN("The concatenation is not nullable") { REQUIRE_FALSE(c.nullable()); }
+    }
+    WHEN("a is concatenated with EmptyString") {
+      Concatenate c(a, e);
+      THEN("The concatenation is not nullable") { REQUIRE_FALSE(c.nullable()); }
+    }
+    WHEN("EmptyString is concatenated with a") {
+      Concatenate c(e, a);
+      THEN("The concatenation is not nullable") { REQUIRE_FALSE(c.nullable()); }
+    }
+    WHEN("EmptyString is concatenated with EmptyString") {
+      Concatenate c(e, e);
+      THEN("The concatenation is nullable") { REQUIRE(c.nullable()); }
+    }
+    WHEN("a is unioned with b") {
+      Union u(a, b);
+      THEN("The union is not nullable") { REQUIRE_FALSE(u.nullable()); }
+    }
+    WHEN("a is unioned with EmptyString") {
+      Union u(a, e);
+      THEN("The union is nullable") { REQUIRE(u.nullable()); }
+    }
+    WHEN("EmptyString is unioned with a") {
+      Union u(e, a);
+      THEN("The union is nullable") { REQUIRE(u.nullable()); }
+    }
+    WHEN("EmptyString is unioned with EmptyString") {
+      Union u(e, e);
+      THEN("The union is nullable") { REQUIRE(u.nullable()); }
+    }
+    WHEN("a is KleeneStarred") {
+      KleeneStar k(a);
+      THEN("The kleenestar is nullable") { REQUIRE(k.nullable()); }
+    }
+    WHEN("EmptyString is KleeneStarred") {
+      KleeneStar k(e);
+      THEN("The KleeneStar is nullable") { REQUIRE(k.nullable()); }
     }
   }
 }
