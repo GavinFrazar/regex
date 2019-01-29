@@ -59,26 +59,32 @@ class KleeneStar : public Regex {
  public:
   KleeneStar(const KleeneStar &other);
   KleeneStar(const Regex &re);
+  KleeneStar(const std::shared_ptr<const Regex> &sptr);
   virtual std::string toString() const override;
   const std::shared_ptr<const Regex> clone() const override;
   const std::shared_ptr<const Regex> a;
+  virtual bool nullable() const override;
 
  protected:
   virtual bool equals(const Regex &other) const override;
-  KleeneStar(const std::shared_ptr<const Regex> &sptr);
 };
 
-// TODO: Make this a singleton.
 class EmptyString : public Regex {
  public:
-  EmptyString() = default;
+  static shared_ptr<EmptyString> getInstance() {
+    static shared_ptr<EmptyString> instance(new EmptyString);
+    return instance;
+  }
+  EmptyString(const EmptyString &) = delete;
+  void operator=(const EmptyString &) = delete;
   virtual std::string toString() const override;
   virtual const std::shared_ptr<const Regex> clone() const override {
-    // STUB
-    return  std::shared_ptr<const Regex>();
+    return std::shared_ptr<const Regex>(this);
   }
+  virtual bool nullable() const override;
 
  protected:
+  EmptyString() {}
   virtual bool equals(const Regex &other) const override;
 };
 
