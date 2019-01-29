@@ -149,9 +149,13 @@ SCENARIO("Determine if a regex is nullable") {
   GIVEN("Some Regexes") {
     Chars a = {'a'}, b = {'b'};
     auto e = EmptyString::getInstance();
-    WHEN(b.toString() + " is tested for nullable") {
-      bool nullable = b.nullable();
+    WHEN(a.toString() + " is tested for nullable") {
+      bool nullable = a.nullable();
       THEN("The regex is not nullable") { REQUIRE_FALSE(nullable); }
+    }
+    WHEN(e->toString() + " is tested for nullable") {
+      bool nullable = e->nullable();
+      THEN("The EmptyString should be nullable") { REQUIRE(nullable); }
     }
     WHEN("a is concatenated with b") {
       Concatenate c(a, b);
