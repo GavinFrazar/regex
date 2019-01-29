@@ -6,6 +6,7 @@ using Regex::Chars;
 using Regex::Concatenate;
 using Regex::EmptyString;
 using Regex::KleeneStar;
+using Regex::Regex;
 using Regex::Union;
 
 SCENARIO("Representing Regex as a string") {
@@ -65,8 +66,8 @@ SCENARIO("Representing Regex as a string") {
 
 SCENARIO("Comparing two regex for equality") {
   GIVEN("Two Char regex") {
-    Chars a{'a'};
-    Chars b{'b'};
+    Chars a = {'a'};
+    Chars b = {'b'};
     WHEN("Chars a is compared with a") {
       bool equal = a == a;
       THEN("The regex should be equal") { REQUIRE(equal); }
@@ -76,15 +77,69 @@ SCENARIO("Comparing two regex for equality") {
       THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
     }
   }
-  GIVEN("Two Concatenate regex") {
+  GIVEN("Some Concatenate regex") {
     Concatenate re1(Chars{'a'}, Chars{'a'});
     Concatenate re2(Chars{'b'}, Chars{'b'});
-    WHEN("re1 is compared with re1") {
+    Concatenate re3(Chars{'a'}, Chars{'b'});
+    Concatenate re4(Chars{'b'}, Chars{'a'});
+    Concatenate re5(Chars{'a'}, Chars{'a'});
+    Chars c = {'c'}, d = {'d'};
+    Concatenate re6(c, d), re7(c, d);
+    WHEN(re1.toString() + " is compared with " + re1.toString()) {
       bool equal = re1 == re1;
       THEN("The regex should be equal") { REQUIRE(equal); }
     }
-    WHEN("re1 is compared with re2") {
+    WHEN(re1.toString() + " is compared with " + re5.toString()) {
+      bool equal = re1 == re5;
+      THEN("The regex should be equal") { REQUIRE(re1 == re5); }
+    }
+    WHEN(re1.toString() + " is compared with " + re2.toString()) {
       bool equal = re1 == re2;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re1.toString() + " is compared with " + re3.toString()) {
+      bool equal = re1 == re3;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re1.toString() + " is compared with " + re4.toString()) {
+      bool equal = re1 == re4;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re3.toString() + " is compared with " + re4.toString()) {
+      bool equal = re3 == re4;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re6.toString() + " is compared with " + re7.toString()) {
+      bool equal = re6 == re7;
+      THEN("The regex should be equal") { REQUIRE(equal); }
+    }
+  }
+  GIVEN("Some Union regex") {
+    Chars a = {'a'}, b = {'b'};
+    Union re1(a, b), re2(b, a);
+    Union re3(a, a), re4(b, b);
+    WHEN(re1.toString() + " is compared with " + re2.toString()) {
+      bool equal = re1 == re2;
+      THEN("The regex should be equal") { REQUIRE(equal); }
+    }
+    WHEN(re1.toString() + " is compared with " + re1.toString()) {
+      bool equal = re1 == re1;
+      THEN("The regex should be equal") { REQUIRE(equal); }
+    }
+    WHEN(re1.toString() + " is compared with " + re3.toString()) {
+      bool equal = re1 == re3;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re1.toString() + " is compared with " + re4.toString()) {
+      bool equal = re1 == re4;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re2.toString() + " is compared with " + re3.toString()) {
+      bool equal = re2 == re3;
+      THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
+    }
+    WHEN(re2.toString() + " is compared with " + re4.toString()) {
+      bool equal = re2 == re4;
       THEN("The regex should not be equal") { REQUIRE_FALSE(equal); }
     }
   }

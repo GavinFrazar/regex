@@ -82,6 +82,7 @@ bool EmptyString::equals(const Regex &other) const {
   // EmptyString is always equal to itself
   return true;
 }
+
 bool operator==(const Regex &a, const Regex &b) {
   if (typeid(a) == typeid(b)) {
     return a.equals(b);
