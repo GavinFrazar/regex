@@ -10,14 +10,15 @@
 namespace Regex {
 /*
  *Abstract Regex class
- *Derived classes must implement a toString, clone, and equals method to get a
- *concrete class.
+ *Derived classes must implement a toString, clone, equals, and nullable method
+ *to get a concrete class.
  */
 class Regex {
  public:
   virtual std::string toString() const = 0;
   virtual const std::shared_ptr<const Regex> clone() const = 0;
   virtual bool equals(const Regex &other) const = 0;
+  virtual bool nullable() const = 0;
 };
 
 class Chars : public Regex {
@@ -29,6 +30,7 @@ class Chars : public Regex {
   explicit Chars(const CharSet &chars);
   virtual std::string toString() const override;
   virtual const std::shared_ptr<const Regex> clone() const override;
+  virtual bool nullable() const override;
   const CharSet chars;
 
  protected:
@@ -40,6 +42,7 @@ class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
   using TwoMembers<Regex, Concatenate>::TwoMembers;
   virtual std::string toString() const override;
   virtual const std::shared_ptr<const Regex> clone() const override;
+  virtual bool nullable() const override;
 
  protected:
   virtual bool equals(const Regex &other) const override;
@@ -50,6 +53,7 @@ class Union : public Regex, public TwoMembers<Regex, Union> {
   using TwoMembers<Regex, Union>::TwoMembers;
   virtual std::string toString() const override;
   const std::shared_ptr<const Regex> clone() const override;
+  virtual bool nullable() const override;
 
  protected:
   virtual bool equals(const Regex &other) const override;

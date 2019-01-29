@@ -24,6 +24,8 @@ const shared_ptr<const Regex> Chars::clone() const {
   return shared_ptr<const Chars>(new Chars(*this));
 }
 
+bool Chars::nullable() const { return false; }
+
 bool Chars::equals(const Regex &other) const {
   auto other_derived = dynamic_cast<const Chars &>(other);
   return chars == other_derived.chars;
@@ -36,6 +38,8 @@ std::string Concatenate::toString() const {
 const shared_ptr<const Regex> Concatenate::clone() const {
   return shared_ptr<const Concatenate>(new Concatenate(*this));
 }
+
+bool Concatenate::nullable() const { return a->nullable() && b->nullable(); }
 
 bool Concatenate::equals(const Regex &other) const {
   auto other_derived = dynamic_cast<const Concatenate &>(other);
@@ -50,6 +54,8 @@ const shared_ptr<const Regex> Union::clone() const {
   return shared_ptr<const Union>(new Union(*this));
 }
 
+bool Union::nullable() const { return a->nullable() || b->nullable(); }
+
 bool Union::equals(const Regex &other) const {
   auto other_derived = dynamic_cast<const Union &>(other);
   // TODO -- make Union construction follow specific ordering to avoid
@@ -62,20 +68,24 @@ KleeneStar::KleeneStar(const KleeneStar &other) : KleeneStar(other.clone()) {}
 
 KleeneStar::KleeneStar(const Regex &re) : a(re.clone()) {}
 
+KleeneStar::KleeneStar(const shared_ptr<const Regex> &sptr) : a(sptr) {}
+
 std::string KleeneStar::toString() const { return "(" + a->toString() + ")*"; }
 
 const shared_ptr<const Regex> KleeneStar::clone() const {
   return shared_ptr<const KleeneStar>(new KleeneStar(a));
 }
 
+bool KleeneStar::nullable() const { return true; }
+
 bool KleeneStar::equals(const Regex &other) const {
   auto other_derived = dynamic_cast<const KleeneStar &>(other);
   return *a == *other_derived.a;
 }
 
-KleeneStar::KleeneStar(const shared_ptr<const Regex> &sptr) : a(sptr) {}
-
 std::string EmptyString::toString() const { return "ε"; }
+
+bool EmptyString::nullable() const { return true; }
 
 bool EmptyString::equals(const Regex &other) const {
   // other is assumed to be of same type in this method
