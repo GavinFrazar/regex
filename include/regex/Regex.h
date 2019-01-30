@@ -10,8 +10,8 @@
 namespace Regex {
 /*
  *Abstract Regex class
- *Derived classes must implement a toString, clone, equals, and nullable method
- *to get a concrete class.
+ *Derived classes must implement a toString, clone, equals, nullable, and derive
+ *method to get a concrete class.
  */
 class Regex {
  public:
@@ -19,6 +19,8 @@ class Regex {
   virtual const std::shared_ptr<const Regex> clone() const = 0;
   virtual bool equals(const Regex &other) const = 0;
   virtual bool nullable() const = 0;
+  bool matches(const std::string &str) const;
+  virtual const std::shared_ptr<const Regex> derive(char c) const = 0;
 };
 
 class Chars : public Regex {
@@ -35,6 +37,7 @@ class Chars : public Regex {
 
  protected:
   virtual bool equals(const Regex &other) const override;
+  virtual const std::shared_ptr<const Regex> derive(char c) const override;
 };
 
 class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
@@ -46,6 +49,7 @@ class Concatenate : public Regex, public TwoMembers<Regex, Concatenate> {
 
  protected:
   virtual bool equals(const Regex &other) const override;
+  virtual const std::shared_ptr<const Regex> derive(char c) const override;
 };
 
 class Union : public Regex, public TwoMembers<Regex, Union> {
@@ -57,6 +61,7 @@ class Union : public Regex, public TwoMembers<Regex, Union> {
 
  protected:
   virtual bool equals(const Regex &other) const override;
+  virtual const std::shared_ptr<const Regex> derive(char c) const override;
 };
 
 class KleeneStar : public Regex {
@@ -71,6 +76,7 @@ class KleeneStar : public Regex {
 
  protected:
   virtual bool equals(const Regex &other) const override;
+  virtual const std::shared_ptr<const Regex> derive(char c) const override;
 };
 
 class EmptyString : public Regex {
@@ -90,6 +96,7 @@ class EmptyString : public Regex {
  protected:
   EmptyString() {}
   virtual bool equals(const Regex &other) const override;
+  virtual const std::shared_ptr<const Regex> derive(char c) const override;
 };
 
 bool operator==(const Regex &a, const Regex &b);

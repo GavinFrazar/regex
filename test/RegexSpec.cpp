@@ -199,3 +199,44 @@ SCENARIO("Determine if a regex is nullable") {
     }
   }
 }
+
+SCENARIO("Matching a simple string") {
+  GIVEN("Some simple regexes") {
+    Chars a = {'a'}, b = {'b'};
+    Concatenate c(a, b);
+    Union u(a, b);
+    KleeneStar k(a);
+    WHEN(a.toString() + " tries to match \"a\"") {
+      bool matched = a.matches("a");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(a.toString() + R"( tries to match "b")") {
+      bool matched = a.matches("b");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "")") {
+      bool matched = k.matches("");
+      THEN("It matches the empty string") { REQUIRE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "a")") {
+      bool matched = k.matches("a");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "aaaaaa")") {
+      bool matched = k.matches("aaaaaa");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "b")") {
+      bool matched = k.matches("b");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "ab")") {
+      bool matched = k.matches("ab");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(k.toString() + R"( tries to match "aaab")") {
+      bool matched = k.matches("aaab");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+  }
+}
