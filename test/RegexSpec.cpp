@@ -201,11 +201,8 @@ SCENARIO("Determine if a regex is nullable") {
 }
 
 SCENARIO("Matching a simple string") {
-  GIVEN("Some simple regexes") {
-    Chars a = {'a'}, b = {'b'};
-    Concatenate c(a, b);
-    Union u(a, b);
-    KleeneStar k(a);
+  Chars a = {'a'}, b = {'b'};
+  GIVEN("Simple chars") {
     WHEN(a.toString() + " tries to match \"a\"") {
       bool matched = a.matches("a");
       THEN("It matches the string") { REQUIRE(matched); }
@@ -214,6 +211,51 @@ SCENARIO("Matching a simple string") {
       bool matched = a.matches("b");
       THEN("It does not match the string") { REQUIRE_FALSE(matched); }
     }
+  }
+  GIVEN("A simple Concatenation") {
+    Concatenate c(a, b);
+    WHEN(c.toString() + R"( tries to match "ab")") {
+      bool matched = c.matches("ab");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(c.toString() + R"( tries to match "")") {
+      bool matched = c.matches("");
+      THEN("It does not match the empty string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(c.toString() + R"( tries to match "aa")") {
+      bool matched = c.matches("aa");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+  }
+  GIVEN("A simple Union") {
+    Union u(a, b);
+    WHEN(u.toString() + R"( tries to match "a")") {
+      bool matched = u.matches("a");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(u.toString() + R"( tries to match "b")") {
+      bool matched = u.matches("b");
+      THEN("It matches the string") { REQUIRE(matched); }
+    }
+    WHEN(u.toString() + R"( tries to match "")") {
+      bool matched = u.matches("");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(u.toString() + R"( tries to match "ab")") {
+      bool matched = u.matches("ab");
+      THEN("It does not match the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(u.toString() + R"( tries to match "aa")") {
+      bool matched = u.matches("aa");
+      THEN("It matches the string") { REQUIRE_FALSE(matched); }
+    }
+    WHEN(u.toString() + R"( tries to match "bb")") {
+      bool matched = u.matches("bb");
+      THEN("It matches the string") { REQUIRE_FALSE(matched); }
+    }
+  }
+  GIVEN("A simple KleeneStar") {
+    KleeneStar k(a);
     WHEN(k.toString() + R"( tries to match "")") {
       bool matched = k.matches("");
       THEN("It matches the empty string") { REQUIRE(matched); }
